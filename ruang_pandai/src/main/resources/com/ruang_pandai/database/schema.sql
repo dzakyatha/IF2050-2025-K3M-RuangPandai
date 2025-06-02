@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS Pengguna (
     id_pengguna TEXT NOT NULL PRIMARY KEY,
     nama TEXT NOT NULL,
-    peran TEXT NOT NULL CHECK(peran IN ('SISWA', 'TUTOR'))
+    peran TEXT NOT NULL CHECK(peran IN ('SISWA', 'TUTOR')),
     email TEXT NOT NULL,
     no_telp TEXT NOT NULL,
     alamat TEXT NOT NULL);

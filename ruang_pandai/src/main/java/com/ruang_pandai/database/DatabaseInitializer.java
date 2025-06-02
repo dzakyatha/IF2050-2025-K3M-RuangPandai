@@ -78,9 +78,9 @@ public class DatabaseInitializer {
                 
                 // Data Jadwal
                 stmt.executeUpdate("INSERT INTO Jadwal (id_jadwal, id_tutor, mata_pelajaran, hari, tanggal, jam_mulai, jam_selesai) VALUES " +
-                    "('J1', 'P1', 'Matematika', 'SENIN', '2025-06-10', '09:00', '11:00'), " +
-                    "('J2', 'P1', 'Matematika', 'RABU', '2025-06-12', '13:00', '15:00'), " +
-                    "('J3', 'P2', 'Bahasa Inggris', 'SELASA', '2025-06-11', '10:00', '12:00')");
+                    "('J1', 'P3', 'Matematika', 'SENIN', '2025-06-10', '09:00', '11:00'), " +
+                    "('J2', 'P3', 'Matematika', 'RABU', '2025-06-12', '13:00', '15:00'), " +
+                    "('J3', 'P4', 'Bahasa Inggris', 'SELASA', '2025-06-11', '10:00', '12:00')");
                 
                 // Data Sesi
                 stmt.executeUpdate("INSERT INTO Sesi (id_sesi, id_siswa, id_tutor, id_jadwal, tanggal_pesan, status_pembayaran, status_kehadiran, status_sesi) VALUES " +
@@ -89,7 +89,7 @@ public class DatabaseInitializer {
                 
                 // Data Pembayaran
                 stmt.executeUpdate("INSERT INTO Pembayaran (id_pembayaran, id_sesi, jumlah, metode_pembayaran, bukti_pembayaran, waktu_pembayaran, status_pembayaran) VALUES " +
-                    "('P1', 'S1', 150000, 'Transfer Bank', 'dummy_bukti.jpg', '2025-06-09 14:30:00', 'BERHASIL')");
+                    "('PB1', 'S1', 150000, 'Transfer Bank', 'dummy_bukti.jpg', '2025-06-09 14:30:00', 'BERHASIL')");
                 
                 System.out.println("Dummy data inserted");
             } catch (SQLException e) {
