@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Jadwal (
     tanggal DATE NOT NULL,
     jam_mulai TIME NOT NULL,
     jam_selesai TIME NOT NULL,
-    FOREIGN KEY (id_tutor) REFERENCES Tutor(id_tutor));
+    FOREIGN KEY (id_tutor) REFERENCES Tutor(id_pengguna));
 
 -- Tabel Sesi
 CREATE TABLE IF NOT EXISTS Sesi (
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS Sesi (
     status_pembayaran TEXT CHECK(status IN ('MENUNGGU PEMBAYARAN', 'SUDAH BAYAR', 'DIBATALKAN')),
     status_kehadiran TEXT CHECK(status IN ('HADIR', 'TIDAK HADIR')),
     status_sesi TEXT CHECK(status IN ('AKAN DATANG', 'SELESAI')),
-    FOREIGN KEY (id_siswa) REFERENCES Siswa(id_siswa),
-    FOREIGN KEY (id_tutor) REFERENCES Tutor(id_tutor),
+    FOREIGN KEY (id_siswa) REFERENCES Siswa(id_pengguna),
+    FOREIGN KEY (id_tutor) REFERENCES Tutor(id_pengguna),
     FOREIGN KEY (id_jadwal) REFERENCES Jadwal(id_jadwal));
 
 -- Tabel Pembayaran
