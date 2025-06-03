@@ -7,12 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseInitializer {
     private static final String DB_FILE = "src/main/resources/database/ruangpandai.db";
-    private static final String SCHEMA_FILE = "/dab/schema.sql";
+    private static final String SCHEMA_FILE = "/com/ruang_pandai/database/schema.sql";
     
     public static void initialize() {
         createDatabaseIfNotExists();
@@ -34,10 +35,16 @@ public class DatabaseInitializer {
     }
     
     private static void executeSchemaScript() {
+        // Path koneksi tetap sama
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
              InputStream input = DatabaseInitializer.class.getResourceAsStream(SCHEMA_FILE);
              BufferedReader reader = new BufferedReader(new InputStreamReader(input));
              Statement stmt = conn.createStatement()) {
+            
+            if (input == null) {
+                System.err.println("Schema file not found! Make sure the path is correct: " + SCHEMA_FILE);
+                return;
+            }
             
             StringBuilder sb = new StringBuilder();
             String line;
@@ -46,7 +53,12 @@ public class DatabaseInitializer {
             }
             
             // Eksekusi skema SQL
-            stmt.executeUpdate(sb.toString());
+            String[] individualStatements = sb.toString().split(";");
+            for (String statement : individualStatements) {
+                if (!statement.trim().isEmpty()) {
+                    stmt.executeUpdate(statement);
+                }
+            }
             System.out.println("Database schema initialized");
             
         } catch (Exception e) {
@@ -56,12 +68,19 @@ public class DatabaseInitializer {
     
     private static void insertDummyDataIfNeeded() {
         if (isDevelopmentMode()) {
+            // Path koneksi tetap sama
             try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
                  Statement stmt = conn.createStatement()) {
                 
-                // dummy data
+                // Cek apakah data sudah ada untuk menghindari duplikasi error
+                ResultSet rs = stmt.executeQuery("SELECT count(*) FROM Pengguna");
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("Dummy data already exists.");
+                    return;
+                }
+                
                 // Data Pengguna
-                stmt.executeUpdate("INSERT INTO Pengguna (id_pengguna, nama, peran, email, no_telp, alamat) VALUES " +
+                stmt.executeUpdate("INSERT INTO Pengguna (id_pengguna, nama, role, email, no_telp, alamat) VALUES " +
                     "('P1', 'Budi Santoso', 'SISWA', 'budi@mail.com', '08123456789', 'Jl. Sudirman No.1, Jakarta'), " +
                     "('P2', 'Ani Wijaya', 'SISWA', 'ani@mail.com', '08234567890', 'Jl. Thamrin No.2, Jakarta'), " +
                     "('P3', 'Citra Dewi', 'TUTOR', 'citra@mail.com', '08345678901', 'Jl. Gatot Subroto No.3, Jakarta'), " +
@@ -93,7 +112,9 @@ public class DatabaseInitializer {
                 
                 System.out.println("Dummy data inserted");
             } catch (SQLException e) {
-                e.printStackTrace();
+                if (!e.getMessage().contains("UNIQUE constraint failed")) {
+                    e.printStackTrace();
+                }
             }
         }
     }
