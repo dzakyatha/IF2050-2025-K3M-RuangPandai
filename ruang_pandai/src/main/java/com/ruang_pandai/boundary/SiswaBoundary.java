@@ -53,6 +53,8 @@ public class SiswaBoundary {
     private Button btnCariTutorSideMenu; // Referensi untuk tombol menu
     private Button btnSesiSayaSideMenu;  // Referensi untuk tombol menu
 
+    private static final String CLEAR_SELECTION_TEXT = "Kosongkan"; // Placeholder untuk ComboBox waktu
+
     public SiswaBoundary(Stage primaryStage, SiswaController siswaController) {
         this.primaryStage = primaryStage;
         this.siswaController = siswaController;
@@ -175,18 +177,29 @@ public class SiswaBoundary {
 
         searchFormLayout.getChildren().add(new Label("Jadwal:")); 
         VBox dateAndTimePicker = new VBox(5);
-        dpTanggal.setValue(LocalDate.now()); 
-        dpTanggal.setPrefWidth(Double.MAX_VALUE);
+        HBox datePickerContainer = new HBox(5);
+        datePickerContainer.setAlignment(Pos.CENTER_LEFT);
+
+        // dpTanggal.setValue(LocalDate.now());
+        Button btnClearDate = new Button("X");
+        btnClearDate.setOnAction(e -> dpTanggal.setValue(null)); 
+
+        HBox.setHgrow(dpTanggal, Priority.ALWAYS);
+        dpTanggal.setMaxWidth(Double.MAX_VALUE);
+        datePickerContainer.getChildren().addAll(dpTanggal, btnClearDate);
 
         VBox timePicker = new VBox(5);
         timePicker.setAlignment(Pos.CENTER_LEFT);
-        cbWaktuMulai.getItems().addAll("07:00 AM", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", 
-        "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM", "08:00 PM", "09:00 PM"); 
+        cbWaktuMulai.getItems().add(CLEAR_SELECTION_TEXT);
+        cbWaktuMulai.getItems().addAll(
+            "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", 
+            "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
+        ); 
         cbWaktuMulai.setPromptText("Pilih waktu");
         cbWaktuMulai.setPrefWidth(Double.MAX_VALUE);
         timePicker.getChildren().addAll(cbWaktuMulai);
 
-        dateAndTimePicker.getChildren().addAll(dpTanggal, timePicker);
+        dateAndTimePicker.getChildren().addAll(datePickerContainer, timePicker);
         searchFormLayout.getChildren().add(dateAndTimePicker);
 
         Button btnCari = new Button("Cari");
@@ -359,6 +372,11 @@ public class SiswaBoundary {
         String mataPelajaran = cbMataPelajaran.getValue(); 
         String namaTutor = tfNamaTutorSearch.getText(); 
         int minRating = (int) sliderRating.getValue(); 
+        LocalDate tanggal = dpTanggal.getValue();
+        String waktuMulai = cbWaktuMulai.getValue();
+        if (CLEAR_SELECTION_TEXT.equals(waktuMulai)) {
+            waktuMulai = null; 
+        }
 
         boolean noSubject = (mataPelajaran == null || mataPelajaran.isEmpty());
         boolean noName = (namaTutor == null || namaTutor.trim().isEmpty());
@@ -368,12 +386,12 @@ public class SiswaBoundary {
             tutorListView.setItems(FXCollections.observableArrayList()); 
             tutorListPlaceholderLabel.setText("Silakan isi filter pencarian."); 
             tutorListView.setPlaceholder(tutorListPlaceholderLabel); 
-            AlertHelper.showInfo("Silakan masukkan kriteria pencarian untuk menampilkan hasil.");
+            AlertHelper.showInfo("Silakan masukkan kriteria pencarian untuk menampilkan hasil. (Minimal Nama/Mata Pelajaran/Rating)");
             return;
         }
 
         try {
-            List<Tutor> tutors = siswaController.cariTutor(mataPelajaran, minRating, namaTutor); 
+            List<Tutor> tutors = siswaController.cariTutor(mataPelajaran, minRating, namaTutor, tanggal, waktuMulai); 
 
             ObservableList<Tutor> data = FXCollections.observableArrayList(tutors); 
             tutorListView.setItems(data); 

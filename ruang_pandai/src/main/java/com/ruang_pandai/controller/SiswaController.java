@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,12 @@ public class SiswaController {
 
     // Method untuk mencari tutor berdasarkan filter
     // Filter 'namaTutor' is added to the parameters and query
-    public List<Tutor> cariTutor(String mataPelajaran, Integer rating, String namaTutor) { // MODIFIED PARAMETERS
+    public List<Tutor> cariTutor(String mataPelajaran, Integer rating, String namaTutor, LocalDate tanggal, String waktuMulai) { 
+        // Jika pengguna tidak memberikan tanggal, tapi memberikan waktuMulai, kembalikan daftar kosong
+        if (tanggal == null && (waktuMulai != null && !waktuMulai.isEmpty())) {
+            return new ArrayList<>(); // Kmbalikan daftar kosong
+        }
+
         List<Tutor> hasilPencarian = new ArrayList<>();
 
         // Langkah 1: Query untuk menemukan tutor yang cocok dengan filter
@@ -47,13 +53,28 @@ public class SiswaController {
             params.add(mataPelajaran);
         }
         if (rating != null && rating > 0) {
-            sql.append(" AND t.rating >= ?");
+            sql.append(" AND t.rating = ?");
             params.add(rating);
         }
         // Add filter for tutor name
         if (namaTutor != null && !namaTutor.trim().isEmpty()) {
             sql.append(" AND p.nama LIKE ?");
             params.add("%" + namaTutor + "%");
+        }
+        // Filter dengan tanggal dan waktu
+        if (tanggal != null) {
+            StringBuilder subQuery = new StringBuilder(" AND EXISTS (SELECT 1 FROM Jadwal j WHERE j.id_tutor = p.id_pengguna");
+
+            subQuery.append(" AND j.tanggal = ?");
+            params.add(tanggal.toString());
+
+            if (waktuMulai != null && !waktuMulai.isEmpty()) {
+                subQuery.append(" AND j.jam_mulai = ?");
+                params.add(waktuMulai);
+            }
+
+            subQuery.append(")");
+            sql.append(subQuery.toString());
         }
 
 
