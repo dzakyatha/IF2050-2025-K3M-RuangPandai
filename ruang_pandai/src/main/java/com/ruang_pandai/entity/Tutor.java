@@ -1,12 +1,15 @@
 package com.ruang_pandai.entity;
+
+import java.util.List;
+
 public class Tutor extends Pengguna {
     private String mataPelajaran;
     private String pendidikan;
     private String pengalaman;
     private String ulasan;
     private Integer rating;
+    private List<Jadwal> jadwal; 
 
-    // Constructor lengkap (termasuk atribut dari Pengguna)
     public Tutor(
         String idPengguna,
         String nama,
@@ -18,7 +21,8 @@ public class Tutor extends Pengguna {
         String pendidikan,
         String pengalaman,
         String ulasan,
-        Integer rating
+        Integer rating,
+        List<Jadwal> jadwal    
     ) {
         super(idPengguna, nama, role, email, noTelp, alamat);
         this.mataPelajaran = mataPelajaran;
@@ -26,6 +30,7 @@ public class Tutor extends Pengguna {
         this.pengalaman = pengalaman;
         this.ulasan = ulasan;
         this.rating = rating;
+        this.jadwal = jadwal;
     }
 
     // Getter & Setter
@@ -69,4 +74,11 @@ public class Tutor extends Pengguna {
         this.rating = rating;
     }
 
+    public List<Jadwal> getJadwal() {
+        return jadwal;
+    }
+
+    public void setJadwal(List<Jadwal> jadwal) {
+        this.jadwal = jadwal;
+    }
 }

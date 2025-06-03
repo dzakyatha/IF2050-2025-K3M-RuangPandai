@@ -8,11 +8,11 @@ public class Jadwal {
     private String tanggal;
     private String jamMulai;
     private String jamSelesai;
-    private String statusJadwal;
+    
 
 
     public Jadwal(String idJadwal, String idTutor, String mataPelajaran, String hari, String tanggal,
-                  String jamMulai, String jamSelesai, String statusJadwal) {
+                  String jamMulai, String jamSelesai) {
         this.idJadwal = idJadwal;
         this.idTutor = idTutor;
         this.mataPelajaran = mataPelajaran;
@@ -20,7 +20,7 @@ public class Jadwal {
         this.tanggal = tanggal;
         this.jamMulai = jamMulai;
         this.jamSelesai = jamSelesai;
-        this.statusJadwal = statusJadwal;
+        
     }
 
     // Getter & Setter
@@ -81,11 +81,4 @@ public class Jadwal {
         this.jamSelesai = jamSelesai;
     }
 
-    public String getStatusJadwal() {
-        return statusJadwal;
-    }
-
-    public void setStatusJadwal(String statusJadwal) {
-        this.statusJadwal = statusJadwal;
-    }
 }
