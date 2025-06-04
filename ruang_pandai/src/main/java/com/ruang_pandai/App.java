@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.ruang_pandai.database.DatabaseInitializer;
+
 /**
  * JavaFX App
  */
@@ -22,6 +24,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        DatabaseInitializer.initialize();
         launch();
     }
 
