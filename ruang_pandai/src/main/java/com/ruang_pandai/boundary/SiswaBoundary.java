@@ -64,7 +64,7 @@ public class SiswaBoundary {
     public Scene createScene() {
         mainLayout = new BorderPane();
         mainLayout.setPadding(new Insets(20));
-        mainLayout.setStyle("-fx-background-color: #f5f5f5;");
+        mainLayout.setStyle("-fx-background-color: #f5f5f5;"); //
 
         // Menu samping
         VBox sideMenu = createSideMenu();
@@ -89,10 +89,10 @@ public class SiswaBoundary {
         VBox sideMenu = new VBox(10);
         sideMenu.setPadding(new Insets(20));
         sideMenu.setPrefWidth(200);
-        sideMenu.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 5px;");
+        sideMenu.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 5px;"); //
 
         Label appTitle = new Label("Ruang Pandai");
-        appTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill:rgb(9, 9, 10);");
+        appTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill:rgb(9, 9, 10);"); //
         sideMenu.getChildren().add(appTitle);
         sideMenu.getChildren().add(new Separator());
 
@@ -105,17 +105,17 @@ public class SiswaBoundary {
         btnCariTutorSideMenu.setStyle(navButtonStyle);
         btnSesiSayaSideMenu.setStyle(navButtonStyle);
 
-        btnCariTutorSideMenu.setOnMouseEntered(e -> { if (!btnCariTutorSideMenu.getStyle().equals(navButtonActiveStyle)) btnCariTutorSideMenu.setStyle(navButtonHoverStyle); }); 
-        btnCariTutorSideMenu.setOnMouseExited(e -> { if (!btnCariTutorSideMenu.getStyle().equals(navButtonActiveStyle)) btnCariTutorSideMenu.setStyle(navButtonStyle); }); 
-        btnSesiSayaSideMenu.setOnMouseEntered(e -> { if (!btnSesiSayaSideMenu.getStyle().equals(navButtonActiveStyle)) btnSesiSayaSideMenu.setStyle(navButtonHoverStyle); }); 
-        btnSesiSayaSideMenu.setOnMouseExited(e -> { if (!btnSesiSayaSideMenu.getStyle().equals(navButtonActiveStyle)) btnSesiSayaSideMenu.setStyle(navButtonStyle); }); 
+        btnCariTutorSideMenu.setOnMouseEntered(e -> { if (!btnCariTutorSideMenu.getStyle().equals(navButtonActiveStyle)) btnCariTutorSideMenu.setStyle(navButtonHoverStyle); });
+        btnCariTutorSideMenu.setOnMouseExited(e -> { if (!btnCariTutorSideMenu.getStyle().equals(navButtonActiveStyle)) btnCariTutorSideMenu.setStyle(navButtonStyle); });
+        btnSesiSayaSideMenu.setOnMouseEntered(e -> { if (!btnSesiSayaSideMenu.getStyle().equals(navButtonActiveStyle)) btnSesiSayaSideMenu.setStyle(navButtonHoverStyle); });
+        btnSesiSayaSideMenu.setOnMouseExited(e -> { if (!btnSesiSayaSideMenu.getStyle().equals(navButtonActiveStyle)) btnSesiSayaSideMenu.setStyle(navButtonStyle); });
 
         btnCariTutorSideMenu.setOnAction(e -> {
             showSearchView();
             setActiveSideMenuButton(btnCariTutorSideMenu);
         });
         btnSesiSayaSideMenu.setOnAction(e -> {
-            AlertHelper.showInfo("Fitur 'Sesi Saya' belum diimplementasikan."); 
+            AlertHelper.showInfo("Fitur 'Sesi Saya' belum diimplementasikan.");
             setActiveSideMenuButton(btnSesiSayaSideMenu);
             // If you implement the "Sesi Saya" view, switch to it here
             // showSesiSayaView();
@@ -126,9 +126,9 @@ public class SiswaBoundary {
     }
 
     private void setActiveSideMenuButton(Button activeButton) {
-        btnCariTutorSideMenu.setStyle(navButtonStyle); 
-        btnSesiSayaSideMenu.setStyle(navButtonStyle); 
-        activeButton.setStyle(navButtonActiveStyle); 
+        btnCariTutorSideMenu.setStyle(navButtonStyle);
+        btnSesiSayaSideMenu.setStyle(navButtonStyle);
+        activeButton.setStyle(navButtonActiveStyle);
     }
 
 
@@ -154,48 +154,51 @@ public class SiswaBoundary {
         searchFormLayout.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 5px;");
 
         searchFormLayout.getChildren().add(new Label("Masukkan nama tutor..."));
-        tfNamaTutorSearch.setPromptText("Cari nama tutor..."); 
+        tfNamaTutorSearch.setPromptText("Cari nama tutor...");
         searchFormLayout.getChildren().add(tfNamaTutorSearch);
 
         searchFormLayout.getChildren().add(new Label("Mata Pelajaran:"));
-        cbMataPelajaran.getItems().addAll("Matematika", "Fisika", "Bahasa Inggris", "Bahasa Indonesia"); 
-        cbMataPelajaran.setPromptText("Pilih mata pelajaran"); 
+        cbMataPelajaran.getItems().addAll("Matematika", "Fisika", "Bahasa Inggris", "Bahasa Indonesia");
+        cbMataPelajaran.setPromptText("Pilih mata pelajaran");
         cbMataPelajaran.setPrefWidth(Double.MAX_VALUE);
         searchFormLayout.getChildren().add(cbMataPelajaran);
 
         searchFormLayout.getChildren().add(new Label("Rating:"));
-        sliderRating.setShowTickLabels(true); 
-        sliderRating.setShowTickMarks(true); 
-        sliderRating.setMajorTickUnit(1); 
-        sliderRating.setBlockIncrement(1); 
-        sliderRating.setSnapToTicks(true); 
+        sliderRating.setShowTickLabels(true);
+        sliderRating.setShowTickMarks(true);
+        sliderRating.setMajorTickUnit(1);
+        sliderRating.setBlockIncrement(1);
+        sliderRating.setSnapToTicks(true);
         HBox ratingDisplay = new HBox(5);
         ratingDisplay.setAlignment(Pos.CENTER_LEFT);
-        Label ratingValueLabel = new Label(String.format("%.0f", sliderRating.getValue())); 
-        sliderRating.valueProperty().addListener((obs, oldVal, newVal) -> ratingValueLabel.setText(String.format("%.0f", newVal))); 
+        Label ratingValueLabel = new Label(String.format("%.0f", sliderRating.getValue()));
+        sliderRating.valueProperty().addListener((obs, oldVal, newVal) -> ratingValueLabel.setText(String.format("%.0f", newVal)));
         ratingDisplay.getChildren().addAll(sliderRating, ratingValueLabel);
         searchFormLayout.getChildren().add(ratingDisplay);
 
-        searchFormLayout.getChildren().add(new Label("Jadwal:")); 
+        searchFormLayout.getChildren().add(new Label("Jadwal:"));
         VBox dateAndTimePicker = new VBox(5);
         HBox datePickerContainer = new HBox(5);
         datePickerContainer.setAlignment(Pos.CENTER_LEFT);
 
-        // dpTanggal.setValue(LocalDate.now());
+        // dpTanggal.setValue(LocalDate.now()); // Commented out to start with no default date
         Button btnClearDate = new Button("X");
-        btnClearDate.setOnAction(e -> dpTanggal.setValue(null)); 
+        btnClearDate.setOnAction(e -> dpTanggal.setValue(null));
+        btnClearDate.setTooltip(new Tooltip("Kosongkan Tanggal"));
+
 
         HBox.setHgrow(dpTanggal, Priority.ALWAYS);
         dpTanggal.setMaxWidth(Double.MAX_VALUE);
         datePickerContainer.getChildren().addAll(dpTanggal, btnClearDate);
 
-        VBox timePicker = new VBox(5);
+
+        VBox timePicker = new VBox(5); // Changed from HBox as it only contains cbWaktuMulai
         timePicker.setAlignment(Pos.CENTER_LEFT);
-        cbWaktuMulai.getItems().add(CLEAR_SELECTION_TEXT);
+        cbWaktuMulai.getItems().add(CLEAR_SELECTION_TEXT); // Add "Kosongkan" option for time
         cbWaktuMulai.getItems().addAll(
-            "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", 
+            "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00",
             "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
-        ); 
+        );
         cbWaktuMulai.setPromptText("Pilih waktu");
         cbWaktuMulai.setPrefWidth(Double.MAX_VALUE);
         timePicker.getChildren().addAll(cbWaktuMulai);
@@ -204,9 +207,9 @@ public class SiswaBoundary {
         searchFormLayout.getChildren().add(dateAndTimePicker);
 
         Button btnCari = new Button("Cari");
-        btnCari.setStyle("-fx-background-color:rgb(10, 11, 11); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5px;"); 
+        btnCari.setStyle("-fx-background-color:rgb(10, 11, 11); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5px;");
         btnCari.setPrefWidth(Double.MAX_VALUE);
-        btnCari.setOnAction(e -> searchTutors()); 
+        btnCari.setOnAction(e -> searchTutors());
         searchFormLayout.getChildren().add(btnCari);
 
         VBox searchResultsLayout = new VBox(10);
@@ -218,10 +221,10 @@ public class SiswaBoundary {
         searchResultsLayout.getChildren().add(resultsTitle);
 
         setupTutorListView();
-        tutorListPlaceholderLabel = new Label("Silakan isi filter pencarian."); 
-        tutorListPlaceholderLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #777777;"); 
-        tutorListView.setPlaceholder(tutorListPlaceholderLabel); 
-        tutorListView.setItems(FXCollections.observableArrayList()); 
+        tutorListPlaceholderLabel = new Label("Silakan isi filter pencarian.");
+        tutorListPlaceholderLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #777777;");
+        tutorListView.setPlaceholder(tutorListPlaceholderLabel);
+        tutorListView.setItems(FXCollections.observableArrayList());
 
 
         searchResultsLayout.getChildren().add(tutorListView);
@@ -246,36 +249,32 @@ public class SiswaBoundary {
                     HBox card = new HBox(15);
                     card.setPadding(new Insets(10));
                     card.setAlignment(Pos.CENTER_LEFT);
-                    card.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;"); 
+                    card.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;");
 
                     Circle profileImage = new Circle(30);
-                    profileImage.setFill(Color.LIGHTGRAY); 
+                    profileImage.setFill(Color.LIGHTGRAY);
 
                     VBox info = new VBox(5);
-                    Label nameLabel = new Label(tutor.getNama()); 
-                    nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;"); 
+                    Label nameLabel = new Label(tutor.getNama());
+                    nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-                    Label subjectLabel = new Label("Tutor " + tutor.getMataPelajaran()); 
-                    subjectLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #555555;"); 
+                    Label subjectLabel = new Label("Tutor " + tutor.getMataPelajaran());
+                    subjectLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #555555;");
 
                     HBox ratingBox = new HBox(5);
                     ratingBox.setAlignment(Pos.CENTER_LEFT);
-                    if (tutor.getRating() != null) { 
-                        Label starIcon = new Label("⭐"); 
-                        Label ratingLabel = new Label(String.valueOf(tutor.getRating())); 
-                        ratingBox.getChildren().addAll(starIcon, ratingLabel); 
-                    } else {
-                        // Optionally add a placeholder if rating is null, or leave it empty
-                        // Label noRatingLabel = new Label("-");
-                        // ratingBox.getChildren().add(noRatingLabel);
+                    if (tutor.getRating() != null) {
+                        Label starIcon = new Label("⭐");
+                        Label ratingLabel = new Label(String.valueOf(tutor.getRating()));
+                        ratingBox.getChildren().addAll(starIcon, ratingLabel);
                     }
 
-                    info.getChildren().clear(); 
-                    info.getChildren().addAll(nameLabel, subjectLabel, ratingBox); 
+                    info.getChildren().clear();
+                    info.getChildren().addAll(nameLabel, subjectLabel, ratingBox);
 
-                    Button btnLihatTutor = new Button("Lihat Tutor"); 
-                    btnLihatTutor.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333333; -fx-font-weight: bold; -fx-background-radius: 5px;"); 
-                    btnLihatTutor.setOnAction(event -> showTutorProfile(tutor)); 
+                    Button btnLihatTutor = new Button("Lihat Tutor");
+                    btnLihatTutor.setStyle("-fx-background-color: #e0e0e0; -fx-text-fill: #333333; -fx-font-weight: bold; -fx-background-radius: 5px;");
+                    btnLihatTutor.setOnAction(event -> showTutorProfile(tutor));
 
                     HBox.setHgrow(info, Priority.ALWAYS);
                     card.getChildren().addAll(profileImage, info, btnLihatTutor);
@@ -296,7 +295,7 @@ public class SiswaBoundary {
         HBox header = new HBox(10);
         header.setAlignment(Pos.CENTER_LEFT);
         Button btnBack = new Button("← Kembali");
-        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-font-weight: bold;"); 
+        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-font-weight: bold;");
         btnBack.setOnAction(e -> {
             showSearchView();
             setActiveSideMenuButton(btnCariTutorSideMenu);
@@ -309,6 +308,13 @@ public class SiswaBoundary {
 
         // Konten utama: Profil Tutor dan Jadwal Tersedia
         VBox content = new VBox(20);
+        // Making the content VBox itself scrollable if the profile + schedules become too long
+        ScrollPane contentScrollPane = new ScrollPane(content);
+        contentScrollPane.setFitToWidth(true);
+        contentScrollPane.setFitToHeight(true); // Allows it to take available height
+        contentScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(contentScrollPane, Priority.ALWAYS);
+
 
         // Profil tutor
         HBox tutorInfoCard = new HBox(20);
@@ -344,23 +350,27 @@ public class SiswaBoundary {
         VBox schedulesSection = new VBox(10);
         schedulesSection.setPadding(new Insets(20));
         schedulesSection.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 8px;");
+        VBox.setVgrow(schedulesSection, Priority.ALWAYS); // Allow schedules section to grow
 
         Label schedulesTitle = new Label("Jadwal Tersedia");
         schedulesTitle.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         schedulesSection.getChildren().add(schedulesTitle);
 
-        vbAvailableSchedules = new VBox(10);
-        ScrollPane schedulesScrollPane = new ScrollPane(); // Create a ScrollPane
-        schedulesScrollPane.setContent(vbAvailableSchedules); // Set vbAvailableSchedules as its content
-        schedulesScrollPane.setFitToWidth(true); // Make the content fit the width of the scroll pane
-        schedulesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Hide horizontal scroll bar
-        schedulesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Show vertical scroll bar only when needed
+        vbAvailableSchedules = new VBox(10); // This VBox will contain the schedule cards
+        ScrollPane schedulesScrollPane = new ScrollPane();
+        schedulesScrollPane.setContent(vbAvailableSchedules);
+        schedulesScrollPane.setFitToWidth(true);
+        schedulesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        schedulesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        // schedulesScrollPane.setPrefHeight(300); // Optionally set a preferred height
 
-        schedulesSection.getChildren().add(schedulesScrollPane); // Add the ScrollPane to the section
-        VBox.setVgrow(schedulesScrollPane, Priority.ALWAYS); // Allow the scroll pane to grow vertically
+        schedulesSection.getChildren().add(schedulesScrollPane);
+        VBox.setVgrow(schedulesScrollPane, Priority.ALWAYS); // Make ScrollPane grow within schedulesSection
+
 
         content.getChildren().addAll(tutorInfoCard, schedulesSection);
-        profileView.getChildren().add(content);
+        // profileView.getChildren().add(content); // Content is now inside contentScrollPane
+        profileView.getChildren().add(contentScrollPane); // Add the main scrollable content area
 
         return profileView;
     }
@@ -369,49 +379,54 @@ public class SiswaBoundary {
         HBox footer = new HBox();
         footer.setPadding(new Insets(10));
         footer.setStyle("-fx-background-color: #ecf0f1; -fx-background-radius: 5px;");
+        // Label status = new Label("Status: Terhubung"); // Removed as per latest provided file
+        // footer.getChildren().add(status);
         return footer;
     }
 
     private void searchTutors() {
-        String mataPelajaran = cbMataPelajaran.getValue(); 
-        String namaTutor = tfNamaTutorSearch.getText(); 
-        int minRating = (int) sliderRating.getValue(); 
+        String mataPelajaran = cbMataPelajaran.getValue();
+        String namaTutor = tfNamaTutorSearch.getText();
+        int minRating = (int) sliderRating.getValue();
         LocalDate tanggal = dpTanggal.getValue();
         String waktuMulai = cbWaktuMulai.getValue();
         if (CLEAR_SELECTION_TEXT.equals(waktuMulai)) {
-            waktuMulai = null; 
+            waktuMulai = null;
         }
+
 
         boolean noSubject = (mataPelajaran == null || mataPelajaran.isEmpty());
         boolean noName = (namaTutor == null || namaTutor.trim().isEmpty());
-        boolean noMinRating = (minRating == 0); 
+        boolean noMinRating = (minRating == 0);
+        boolean noDate = (tanggal == null);
+        boolean noTime = (waktuMulai == null || waktuMulai.isEmpty());
 
-        if (noSubject && noName && noMinRating) {
-            tutorListView.setItems(FXCollections.observableArrayList()); 
-            tutorListPlaceholderLabel.setText("Silakan isi filter pencarian."); 
-            tutorListView.setPlaceholder(tutorListPlaceholderLabel); 
-            AlertHelper.showInfo("Silakan masukkan kriteria pencarian untuk menampilkan hasil. (Minimal Nama/Mata Pelajaran/Rating)");
+
+        if (noSubject && noName && noMinRating && noDate && noTime) { // Check all filters
+            tutorListView.setItems(FXCollections.observableArrayList());
+            tutorListPlaceholderLabel.setText("Silakan isi filter pencarian.");
+            tutorListView.setPlaceholder(tutorListPlaceholderLabel);
+            AlertHelper.showInfo("Silakan masukkan kriteria pencarian untuk menampilkan hasil.");
             return;
         }
 
         try {
-            List<Tutor> tutors = siswaController.cariTutor(mataPelajaran, minRating, namaTutor, tanggal, waktuMulai); 
+            List<Tutor> tutors = siswaController.cariTutor(mataPelajaran, minRating, namaTutor, tanggal, waktuMulai);
 
-            ObservableList<Tutor> data = FXCollections.observableArrayList(tutors); 
-            tutorListView.setItems(data); 
+            ObservableList<Tutor> data = FXCollections.observableArrayList(tutors);
+            tutorListView.setItems(data);
 
-            // Update placeholder based on search results
-            if (tutors.isEmpty()) { 
-                tutorListPlaceholderLabel.setText("Tidak ada tutor yang sesuai."); 
-                tutorListView.setPlaceholder(tutorListPlaceholderLabel); 
+            if (tutors.isEmpty()) {
+                tutorListPlaceholderLabel.setText("Tidak ada tutor yang sesuai.");
+                tutorListView.setPlaceholder(tutorListPlaceholderLabel);
             } else {
-                tutorListView.setPlaceholder(null); 
+                tutorListView.setPlaceholder(null);
             }
 
         } catch (Exception e) {
-            AlertHelper.showError("Error saat mencari tutor: " + e.getMessage()); 
-            tutorListView.setItems(FXCollections.observableArrayList()); 
-            if (tutorListPlaceholderLabel != null) { 
+            AlertHelper.showError("Error saat mencari tutor: " + e.getMessage());
+            tutorListView.setItems(FXCollections.observableArrayList());
+            if (tutorListPlaceholderLabel != null) {
                  tutorListPlaceholderLabel.setText("Terjadi kesalahan saat pencarian.");
                  tutorListView.setPlaceholder(tutorListPlaceholderLabel);
             }
@@ -419,121 +434,137 @@ public class SiswaBoundary {
     }
 
     private void showTutorProfile(Tutor tutor) {
-        // Isi data profil tutor
-        lblProfileTutorName.setText(tutor.getNama()); 
-        lblProfileTutorSubject.setText("Tutor " + tutor.getMataPelajaran()); 
-        lblProfileTutorEducation.setText("Pendidikan: " + tutor.getPendidikan()); 
-        lblProfileTutorRating.setText(tutor.getRating() != null ? String.valueOf(tutor.getRating()) : "N/A"); 
+        lblProfileTutorName.setText(tutor.getNama());
+        lblProfileTutorSubject.setText("Tutor " + tutor.getMataPelajaran());
+        lblProfileTutorEducation.setText("Pendidikan: " + tutor.getPendidikan());
+        lblProfileTutorRating.setText(tutor.getRating() != null ? String.valueOf(tutor.getRating()) : "N/A");
 
-        // Isi jadwal yang tersedia
-        vbAvailableSchedules.getChildren().clear(); 
-        List<Jadwal> dummyJadwals = tutor.getJadwal(); 
+        vbAvailableSchedules.getChildren().clear();
+        List<Jadwal> jadwalList = tutor.getJadwal(); // Changed from dummyJadwals
 
-        if (dummyJadwals == null || dummyJadwals.isEmpty()) { 
-            Label noScheduleLabel = new Label("Tidak ada jadwal tersedia untuk tutor ini"); 
-            noScheduleLabel.setStyle(" -fx-text-fill: #555555;"); 
-            noScheduleLabel.setAlignment(Pos.CENTER);
-            vbAvailableSchedules.getChildren().add(noScheduleLabel); 
+        if (jadwalList == null || jadwalList.isEmpty()) {
+            Label noScheduleLabel = new Label("Tidak ada jadwal tersedia untuk tutor ini."); // Corrected text
+            noScheduleLabel.setStyle("-fx-font-style: italic; -fx-text-fill: #555555;"); // Corrected style
+            // noScheduleLabel.setAlignment(Pos.CENTER); // Removed, VBox will handle alignment
+            vbAvailableSchedules.getChildren().add(noScheduleLabel);
         } else {
-            for (Jadwal jadwal : dummyJadwals) { 
-                VBox scheduleCard = new VBox(5); 
-                scheduleCard.setPadding(new Insets(15)); 
-                scheduleCard.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;"); 
+            for (Jadwal jadwal : jadwalList) {
+                VBox scheduleCard = new VBox(5);
+                scheduleCard.setPadding(new Insets(15));
+                scheduleCard.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;");
 
                 Label courseLabel = new Label(jadwal.getMataPelajaran());
                 courseLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-                String tanggalLengkap = jadwal.getTanggal();
-                LocalDate date = LocalDate.parse(tanggalLengkap);
+                String tanggalLengkap = jadwal.getTanggal(); // "YYYY-MM-DD"
+                LocalDate date = LocalDate.parse(tanggalLengkap); // Parses "YYYY-MM-DD"
 
                 int year = date.getYear();
-                Month month = date.getMonth();
+                Month month = date.getMonth(); // Java Time Month enum
                 int day = date.getDayOfMonth();
 
-                Label dateLabel = new Label(jadwal.getHari() + ", " + day + " " +month+ " " + year);
-                dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;"); 
+                // Format date string properly
+                String monthName = month.toString().substring(0,1) + month.toString().substring(1).toLowerCase(); // Capitalize first letter
+                Label dateLabel = new Label(jadwal.getHari().substring(0,1) + jadwal.getHari().substring(1).toLowerCase() + ", " + day + " " + monthName + " " + year);
+                dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
                 Label timeLabel = new Label(jadwal.getJamMulai() + " - " + jadwal.getJamSelesai());
-                timeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;"); 
+                timeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-                Button btnPesanSesi = new Button("Pesan Sesi"); 
-                btnPesanSesi.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;"); 
-                //btnPesanSesi.setOnAction(e -> showBookingDialog(tutor, jadwal)); 
+                Button btnPesanSesi = new Button("Pesan Sesi");
+                btnPesanSesi.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;");
+                btnPesanSesi.setOnAction(e -> showBookingDialog(tutor, jadwal)); // Connect to dialog
 
-                scheduleCard.getChildren().addAll(courseLabel, dateLabel, timeLabel, btnPesanSesi); 
-                vbAvailableSchedules.getChildren().add(scheduleCard); 
+                scheduleCard.getChildren().addAll(courseLabel, dateLabel, timeLabel, btnPesanSesi);
+                vbAvailableSchedules.getChildren().add(scheduleCard);
             }
         }
 
-        tutorProfileView.setVisible(true); 
-        searchView.setVisible(false); 
-        mainLayout.setCenter(tutorProfileView); 
+        tutorProfileView.setVisible(true);
+        searchView.setVisible(false);
+        mainLayout.setCenter(tutorProfileView);
     }
 
     private void showSearchView() {
-        tutorProfileView.setVisible(false); 
-        searchView.setVisible(true); 
-        mainLayout.setCenter(searchView); 
+        tutorProfileView.setVisible(false);
+        searchView.setVisible(true);
+        mainLayout.setCenter(searchView);
     }
 
-    // private void showBookingDialog(Tutor tutor, Jadwal jadwal) {
-    //     // Dialog untuk pemesanan sesi
-    //     Dialog<String> dialog = new Dialog<>();
-    //     dialog.setTitle("Pesan Sesi");
-    //     dialog.setHeaderText("Pesan sesi dengan " + tutor.getNama());
+    private void showBookingDialog(Tutor tutor, Jadwal jadwal) {
+        Dialog<ButtonType> dialog = new Dialog<>(); // Use ButtonType for result
+        dialog.setTitle("Pesan Sesi");
+        dialog.setHeaderText("Konfirmasi Pemesanan Sesi");
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/com/ruang_pandai/styles/style.css") != null ? getClass().getResource("/com/ruang_pandai/styles/style.css").toExternalForm() : "");
 
-    //     // Tombol OK dan Cancel
-    //     ButtonType bookButtonType = new ButtonType("Pesan", ButtonBar.ButtonData.OK_DONE);
-    //     dialog.getDialogPane().getButtonTypes().addAll(bookButtonType, ButtonType.CANCEL);
 
-    //     // Form pemesanan
-    //     GridPane grid = new GridPane();
-    //     grid.setHgap(10);
-    //     grid.setVgap(10);
-    //     grid.setPadding(new Insets(20, 10, 10, 10));
+        // Set the button types.
+        ButtonType pesanButtonType = new ButtonType("Pesan", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(pesanButtonType, ButtonType.CANCEL);
 
-    //     grid.add(new Label("Tutor:"), 0, 0);
-    //     TextField tfTutor = new TextField(tutor.getNama());
-    //     tfTutor.setEditable(false);
-    //     grid.add(tfTutor, 1, 0);
+        // Create the content for the dialog.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10)); // Adjusted padding
 
-    //     grid.add(new Label("Mata Pelajaran:"), 0, 1);
-    //     TextField tfSubject = new TextField(jadwal.getMataPelajaran());
-    //     tfSubject.setEditable(false);
-    //     grid.add(tfSubject, 1, 1);
+        Label tutorLabel = new Label("Tutor:");
+        Label tutorValue = new Label(tutor.getNama());
+        grid.add(tutorLabel, 0, 0);
+        grid.add(tutorValue, 1, 0);
 
-    //     grid.add(new Label("Tanggal:"), 0, 2);
-    //     DatePicker dpDate = new DatePicker(LocalDate.now().plusDays(1));
-    //     grid.add(dpDate, 1, 2);
+        Label mapelLabel = new Label("Mata Pelajaran:");
+        Label mapelValue = new Label(jadwal.getMataPelajaran());
+        grid.add(mapelLabel, 0, 1);
+        grid.add(mapelValue, 1, 1);
 
-    //     grid.add(new Label("Waktu Mulai:"), 0, 3);
-    //     ComboBox<String> cbTime = new ComboBox<>();
-    //     cbTime.getItems().addAll("08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00");
-    //     cbTime.setValue("10:00");
-    //     grid.add(cbTime, 1, 3);
+        String tanggalLengkap = jadwal.getTanggal();
+        LocalDate date = LocalDate.parse(tanggalLengkap);
+        String monthName = date.getMonth().toString().substring(0,1) + date.getMonth().toString().substring(1).toLowerCase();
 
-    //     grid.add(new Label("Durasi (jam):"), 0, 4);
-    //     ComboBox<String> cbDuration = new ComboBox<>();
-    //     cbDuration.getItems().addAll("1", "2", "3");
-    //     cbDuration.setValue("2");
-    //     grid.add(cbDuration, 1, 4);
+        Label tanggalLabel = new Label("Hari/Tanggal:");
+        Label tanggalValue = new Label(jadwal.getHari().substring(0, 1) + jadwal.getHari().substring(1).toLowerCase() + ", " + date.getDayOfMonth() + " " + monthName + " " + date.getYear());
+        grid.add(tanggalLabel, 0, 2);
+        grid.add(tanggalValue, 1, 2);
 
-    //     grid.add(new Label("Metode Pembayaran:"), 0, 5);
-    //     TextField tfPayment = new TextField();
-    //     tfPayment.setPromptText("Transfer Bank/GOPAY/OVO");
-    //     grid.add(tfPayment, 1, 5);
+        Label waktuLabel = new Label("Waktu:");
+        Label waktuValue = new Label(jadwal.getJamMulai() + " - " + jadwal.getJamSelesai());
+        grid.add(waktuLabel, 0, 3);
+        grid.add(waktuValue, 1, 3);
 
-    //     dialog.getDialogPane().setContent(grid);
+        Label metodePembayaranLabel = new Label("Metode Pembayaran:");
+        ComboBox<String> cbMetodePembayaran = new ComboBox<>();
+        cbMetodePembayaran.getItems().addAll("Transfer Bank", "Gopay", "OVO");
+        cbMetodePembayaran.setPromptText("Pilih metode pembayaran");
+        cbMetodePembayaran.setPrefWidth(200); // Set preferred width
+        grid.add(metodePembayaranLabel, 0, 4);
+        grid.add(cbMetodePembayaran, 1, 4);
+        
+        dialog.getDialogPane().setContent(grid);
 
-    //     // Hasil dialog
-    //     dialog.setResultConverter(dialogButton -> {
-    //         if (dialogButton == bookButtonType) {
-    //             return "Pemesanan berhasil!";
-    //         }
-    //         return null;
-    //     });
+        // Convert the result to a String or some other object when the login button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == pesanButtonType) {
+                if (cbMetodePembayaran.getValue() == null || cbMetodePembayaran.getValue().isEmpty()) {
+                    AlertHelper.showError("Metode pembayaran harus dipilih.");
+                    return null; // Prevent dialog from closing
+                }
+                // Here you would typically call a controller method to save the booking
+                // For example: siswaController.pesanSesi(siswaLoggedIn, tutor, jadwal, cbMetodePembayaran.getValue());
+                return dialogButton; // Return the button type itself
+            }
+            return null;
+        });
 
-    //     dialog.showAndWait().ifPresent(result -> {
-    //         AlertHelper.showInfo("Pemesanan berhasil untuk " + tutor.getNama());
-    //     });
-    // }
+        dialog.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == pesanButtonType) {
+                 // This check is technically redundant if the null return in resultConverter works
+                if (cbMetodePembayaran.getValue() != null && !cbMetodePembayaran.getValue().isEmpty()) {
+                    AlertHelper.showInfo("Pemesanan sesi untuk " + tutor.getNama() +
+                                         " pada " + tanggalValue.getText() +
+                                         " pukul " + waktuValue.getText() +
+                                         " dengan metode " + cbMetodePembayaran.getValue() + " berhasil.");
+                }
+            }
+        });
+    }
 }
