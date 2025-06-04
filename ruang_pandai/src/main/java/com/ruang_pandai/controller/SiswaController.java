@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class SiswaController {
 
     // Corrected DB_URL
-    private final String DB_URL = "jdbc:sqlite:src/main/resources/database/ruangpandai.db"; // MODIFIED LINE
+    private final String DB_URL = "jdbc:sqlite:src/main/resources/com/ruang_pandai/database/ruangpandai.db"; 
     private Connection conn;
 
     public SiswaController() {
@@ -32,10 +32,10 @@ public class SiswaController {
     // Method untuk mencari tutor berdasarkan filter
     // Filter 'namaTutor' is added to the parameters and query
     public List<Tutor> cariTutor(String mataPelajaran, Integer rating, String namaTutor, LocalDate tanggal, String waktuMulai) { 
-        // Jika pengguna tidak memberikan tanggal, tapi memberikan waktuMulai, kembalikan daftar kosong
-        if (tanggal == null && (waktuMulai != null && !waktuMulai.isEmpty())) {
-            return new ArrayList<>(); // Kmbalikan daftar kosong
-        }
+        // // Jika pengguna tidak memberikan tanggal, tapi memberikan waktuMulai, kembalikan daftar kosong
+        // if (tanggal == null && (waktuMulai != null && !waktuMulai.isEmpty())) {
+        //     return new ArrayList<>(); // Kmbalikan daftar kosong
+        // }
 
         List<Tutor> hasilPencarian = new ArrayList<>();
 
@@ -153,6 +153,7 @@ public class SiswaController {
             tutor.setJadwal(jadwalMap.getOrDefault(tutor.getIdPengguna(), new ArrayList<>())); // Use getOrDefault
         }
 
+        // System.out.println(hasilPencarian.size());
         return hasilPencarian;
     }
 

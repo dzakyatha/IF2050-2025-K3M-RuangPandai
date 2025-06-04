@@ -12,6 +12,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import com.ruang_pandai.controller.SiswaController;
@@ -254,7 +255,7 @@ public class SiswaBoundary {
                     Label nameLabel = new Label(tutor.getNama()); 
                     nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;"); 
 
-                    Label subjectLabel = new Label(tutor.getRole() + " " + tutor.getMataPelajaran()); 
+                    Label subjectLabel = new Label("Tutor " + tutor.getMataPelajaran()); 
                     subjectLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #555555;"); 
 
                     HBox ratingBox = new HBox(5);
@@ -349,7 +350,14 @@ public class SiswaBoundary {
         schedulesSection.getChildren().add(schedulesTitle);
 
         vbAvailableSchedules = new VBox(10);
-        schedulesSection.getChildren().add(vbAvailableSchedules);
+        ScrollPane schedulesScrollPane = new ScrollPane(); // Create a ScrollPane
+        schedulesScrollPane.setContent(vbAvailableSchedules); // Set vbAvailableSchedules as its content
+        schedulesScrollPane.setFitToWidth(true); // Make the content fit the width of the scroll pane
+        schedulesScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Hide horizontal scroll bar
+        schedulesScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Show vertical scroll bar only when needed
+
+        schedulesSection.getChildren().add(schedulesScrollPane); // Add the ScrollPane to the section
+        VBox.setVgrow(schedulesScrollPane, Priority.ALWAYS); // Allow the scroll pane to grow vertically
 
         content.getChildren().addAll(tutorInfoCard, schedulesSection);
         profileView.getChildren().add(content);
@@ -361,10 +369,6 @@ public class SiswaBoundary {
         HBox footer = new HBox();
         footer.setPadding(new Insets(10));
         footer.setStyle("-fx-background-color: #ecf0f1; -fx-background-radius: 5px;");
-
-        Label status = new Label("Status: Terhubung");
-        footer.getChildren().add(status);
-
         return footer;
     }
 
@@ -426,8 +430,9 @@ public class SiswaBoundary {
         List<Jadwal> dummyJadwals = tutor.getJadwal(); 
 
         if (dummyJadwals == null || dummyJadwals.isEmpty()) { 
-            Label noScheduleLabel = new Label("Tidak ada jadwal tersedia untuk tutor ini."); 
-            noScheduleLabel.setStyle("-fx-font-style: italic; -fx-text-fill: #555555;"); 
+            Label noScheduleLabel = new Label("Tidak ada jadwal tersedia untuk tutor ini"); 
+            noScheduleLabel.setStyle(" -fx-text-fill: #555555;"); 
+            noScheduleLabel.setAlignment(Pos.CENTER);
             vbAvailableSchedules.getChildren().add(noScheduleLabel); 
         } else {
             for (Jadwal jadwal : dummyJadwals) { 
@@ -435,20 +440,26 @@ public class SiswaBoundary {
                 scheduleCard.setPadding(new Insets(15)); 
                 scheduleCard.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 8px; -fx-border-color: #e0e0e0; -fx-border-radius: 8px;"); 
 
-                Label dateTimeLabel = new Label( 
-                    jadwal.getMataPelajaran() + " - " + 
-                    jadwal.getHari() + ", " + 
-                    jadwal.getTanggal() + " (" + 
-                    jadwal.getJamMulai() + " - " + 
-                    jadwal.getJamSelesai() + ")" 
-                );
-                dateTimeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;"); 
+                Label courseLabel = new Label(jadwal.getMataPelajaran());
+                courseLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
+                String tanggalLengkap = jadwal.getTanggal();
+                LocalDate date = LocalDate.parse(tanggalLengkap);
+
+                int year = date.getYear();
+                Month month = date.getMonth();
+                int day = date.getDayOfMonth();
+
+                Label dateLabel = new Label(jadwal.getHari() + ", " + day + " " +month+ " " + year);
+                dateLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;"); 
+                Label timeLabel = new Label(jadwal.getJamMulai() + " - " + jadwal.getJamSelesai());
+                timeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;"); 
 
                 Button btnPesanSesi = new Button("Pesan Sesi"); 
                 btnPesanSesi.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;"); 
                 //btnPesanSesi.setOnAction(e -> showBookingDialog(tutor, jadwal)); 
 
-                scheduleCard.getChildren().addAll(dateTimeLabel, btnPesanSesi); 
+                scheduleCard.getChildren().addAll(courseLabel, dateLabel, timeLabel, btnPesanSesi); 
                 vbAvailableSchedules.getChildren().add(scheduleCard); 
             }
         }
