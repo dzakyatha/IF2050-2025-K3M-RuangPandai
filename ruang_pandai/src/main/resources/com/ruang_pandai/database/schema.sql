@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS Sesi (
     id_tutor TEXT NOT NULL,
     id_jadwal TEXT NOT NULL,
     tanggal_pesan DATE NOT NULL,
-    status_pembayaran TEXT CHECK(status_pembayaran IN ('MENUNGGU PEMBAYARAN', 'SUDAH BAYAR', 'DIBATALKAN')),
-    status_kehadiran TEXT CHECK(status_kehadiran IN ('HADIR', 'TIDAK HADIR')),
-    status_sesi TEXT CHECK(status_sesi IN ('AKAN DATANG', 'SELESAI')),
+    status_pembayaran TEXT CHECK(status_pembayaran IN ('SUDAH BAYAR', 'DIBATALKAN')),
+    status_kehadiran TEXT CHECK(status_kehadiran IN ('BELUM DIKONFIRMASI', 'HADIR', 'TIDAK HADIR')),
+    status_sesi TEXT CHECK(status_sesi IN ('AKAN DATANG', 'SELESAI', 'DIBATALKAN')),
     FOREIGN KEY (id_siswa) REFERENCES Siswa(id_pengguna),
     FOREIGN KEY (id_tutor) REFERENCES Tutor(id_pengguna),
     FOREIGN KEY (id_jadwal) REFERENCES Jadwal(id_jadwal));
