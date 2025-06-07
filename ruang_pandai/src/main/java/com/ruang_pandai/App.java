@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import com.ruang_pandai.database.DatabaseInitializer;
-import com.ruang_pandai.boundary.SiswaBoundary;
-import com.ruang_pandai.controller.SiswaController;
 import com.ruang_pandai.database.DatabaseInitializer;
 
 public class App extends Application {
@@ -21,10 +19,10 @@ public class App extends Application {
         primaryStage = stage; 
         primaryStage.setTitle("Ruang Pandai");
 
-        SiswaController siswaController = new SiswaController();
-        SiswaBoundary siswaBoundary = new SiswaBoundary(primaryStage, siswaController);
+        // SiswaController siswaController = new SiswaController();
+        // SiswaBoundary siswaBoundary = new SiswaBoundary(primaryStage, siswaController);
 
-        primaryStage.setScene(siswaBoundary.createScene());
+        //primaryStage.setScene(siswaBoundary.createScene());
         primaryStage.show();
     }
 
