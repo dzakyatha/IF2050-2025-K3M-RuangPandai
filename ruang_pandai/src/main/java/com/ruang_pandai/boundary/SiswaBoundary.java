@@ -1,5 +1,6 @@
 package com.ruang_pandai.boundary;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -1022,15 +1023,28 @@ public class SiswaBoundary {
         result.ifPresent(buttonType -> {
             if (buttonType == lanjutkanButtonType) {
                 if (selectedProofFile != null) {
-                    // asumsi kita sebagai siswa dengan id P1 dan total pembayaran 100.000
-                    siswaController.pesanSesi("P1", tutor.getIdPengguna(), jadwal.getIdJadwal(), paymentMethod, 100000);
-                    AlertHelper.showInfo("Pemesanan Sesi Berhasil!");
+                    boolean success = siswaController.pesanSesi("P1", tutor.getIdPengguna(), jadwal.getIdJadwal(), paymentMethod, 100000);
+                    if (success) {
+                        handlePemesananSesi(tutor, jadwal);
+                    } else {
+                        AlertHelper.showError("Pemesanan Sesi Gagal. Jadwal mungkin sudah tidak tersedia.");
+                    }
                 } else {
                     AlertHelper.showError("Silakan pilih file bukti pembayaran."); 
                 }
             }
         });
     }
+
+    // Method untuk refresh UI profil tutor
+    private void handlePemesananSesi(Tutor tutor, Jadwal jadwal) {
+    AlertHelper.showInfo("Pemesanan Sesi Berhasil!");
+    
+    if (tutor.getJadwal() != null) {
+        tutor.getJadwal().remove(jadwal);
+    }
+    showTutorProfile(tutor);
+}
     
     private void applyDialogStyles(DialogPane dialogPane) {
         dialogPane.setStyle("-fx-font-size: 13px;"); 
