@@ -3,6 +3,7 @@ package com.ruang_pandai.controller;
 import com.ruang_pandai.entity.Jadwal;
 import com.ruang_pandai.entity.Sesi;
 import com.ruang_pandai.entity.Tutor;
+import com.ruang_pandai.database.DatabaseInitializer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -638,14 +639,18 @@ public class SiswaController {
     //         System.out.println("Hasil: Tidak ada tutor yang ditemukan. Skenario berhenti.");
     //     } else {
     //         Tutor tutorPilihan = hasilCari.get(0);
-    //         Jadwal jadwalPilihan = tutorPilihan.getJadwal().get(0);
-    //         System.out.println("  -> Tutor ditemukan: " + tutorPilihan.getNama() + " dengan jadwal ID: " + jadwalPilihan.getIdJadwal());
-
-    //         System.out.println("[+] Siswa 'P1' (Budi Santoso) memesan sesi dan langsung membayar...");
-    //         boolean pemesananBerhasil = controller.pesanSesi("P1", tutorPilihan.getIdPengguna(), jadwalPilihan.getIdJadwal(), "Gopay", 175000);
-
-    //         if (!pemesananBerhasil) {
-    //             System.out.println("  -> Gagal memesan dan membayar sesi.");
+    //         if (tutorPilihan.getJadwal().isEmpty()) {
+    //             System.out.println("  -> Tutor ditemukan: " + tutorPilihan.getNama() + ", tetapi tidak memiliki jadwal yang 'TERSEDIA' saat ini.");
+    //         } else {
+    //             Jadwal jadwalPilihan = tutorPilihan.getJadwal().get(0);
+    //             System.out.println("  -> Tutor ditemukan: " + tutorPilihan.getNama() + " dengan jadwal ID: " + jadwalPilihan.getIdJadwal());
+    
+    //             System.out.println("[+] Siswa 'P1' (Budi Santoso) memesan sesi dan langsung membayar...");
+    //             boolean pemesananBerhasil = controller.pesanSesi("P1", tutorPilihan.getIdPengguna(), jadwalPilihan.getIdJadwal(), "Gopay", 175000);
+    
+    //             if (!pemesananBerhasil) {
+    //                 System.out.println("  -> Gagal memesan dan membayar sesi.");
+    //             }
     //         }
     //     }
         

@@ -105,7 +105,7 @@ public class DatabaseInitializer {
                 // Data Sesi
                 stmt.executeUpdate("INSERT INTO Sesi (id_sesi, id_siswa, id_tutor, id_jadwal, tanggal_pesan, status_pembayaran, status_kehadiran, status_sesi) VALUES " +
                     "('S1', 'P1', 'P3', 'J1', '2025-06-09', 'SUDAH BAYAR', 'BELUM DIKONFIRMASI', 'AKAN DATANG'), " +
-                    "('S2', 'P2', 'P4', 'J2', '2025-06-11', 'DIBATALKAN', 'BELUM DIKONFIRMASI', 'DIBATALKAN'), " +
+                    "('S2', 'P2', 'P3', 'J3', '2025-06-10', 'DIBATALKAN', 'BELUM DIKONFIRMASI', 'DIBATALKAN'), " +
                     "('S3', 'P1', 'P4', 'J3', '2025-06-09', 'DIBATALKAN', 'BELUM DIKONFIRMASI', 'DIBATALKAN')");
                 
                 // Data Pembayaran

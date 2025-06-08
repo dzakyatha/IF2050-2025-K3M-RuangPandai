@@ -80,7 +80,7 @@ public class Jadwal {
         this.jamSelesai = jamSelesai;
     }
 
-    public String getStatusJadwal(String statusJadwal){
+    public String getStatusJadwal(){
         return statusJadwal;
     }
 
