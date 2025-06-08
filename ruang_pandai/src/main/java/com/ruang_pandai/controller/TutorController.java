@@ -1,193 +1,163 @@
 package com.ruang_pandai.controller;
 
-import com.ruang_pandai.database.DatabaseInitializer;
 import com.ruang_pandai.entity.Jadwal;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TutorController {
 
     private static final String DB_URL = "jdbc:sqlite:src/main/resources/com/ruang_pandai/database/ruangpandai.db";
+    private Connection conn;
 
-    // Method buatJadwal untuk menambahkan jadwal baru ke database
-    // Operasi ini akan memasukkan data jadwal ke dalam tabel Jadwal.
-    public void buatJadwal(Jadwal jadwal) {
+    public TutorController() {
+        try {
+            this.conn = DriverManager.getConnection(DB_URL);
+        } catch (SQLException e) {
+            System.err.println("Koneksi ke database GAGAL di TutorController: " + e.getMessage());
+            throw new RuntimeException("Tidak dapat terhubung ke database.", e);
+        }
+    }
+    
+    private String generateNextId() {
+        int nextNumber = 1;
+        String query = "SELECT id_jadwal FROM Jadwal ORDER BY LENGTH(id_jadwal) DESC, id_jadwal DESC LIMIT 1";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            if (rs.next()) {
+                String lastId = rs.getString("id_jadwal");
+                nextNumber = Integer.parseInt(lastId.replace("J", "")) + 1;
+            }
+        } catch (SQLException | NumberFormatException e) {
+            System.err.println("Gagal membuat ID Jadwal baru, akan memulai dari 1. Error: " + e.getMessage());
+        }
+        return "J" + nextNumber;
+    }
+
+    /**
+     * [BARU] Method internal untuk memeriksa jadwal yang tumpang tindih.
+     */
+    private boolean isJadwalOverlap(Jadwal jadwal, String idToExclude) {
+        String sql = "SELECT COUNT(*) FROM Jadwal WHERE id_tutor = ? AND tanggal = ? AND " +
+                     "jam_mulai < ? AND jam_selesai > ?";
+        
+        if (idToExclude != null) {
+            sql += " AND id_jadwal != ?";
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            int paramIndex = 1;
+            pstmt.setString(paramIndex++, jadwal.getIdTutor());
+            pstmt.setString(paramIndex++, jadwal.getTanggal());
+            pstmt.setString(paramIndex++, jadwal.getJamSelesai());
+            pstmt.setString(paramIndex++, jadwal.getJamMulai());
+            if (idToExclude != null) {
+                pstmt.setString(paramIndex, idToExclude);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true; // Ditemukan jadwal yang tumpang tindih
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: Gagal memeriksa jadwal tumpang tindih: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * DIPERBARUI: Menambah validasi sebelum menyimpan.
+     */
+    public boolean buatJadwal(Jadwal jadwal) {
+        // // Validasi backend
+        if (!isJadwalValid(jadwal, null)) return false;
+
+        String newId = generateNextId();
         String sql = "INSERT INTO Jadwal(id_jadwal, id_tutor, mata_pelajaran, hari, tanggal, jam_mulai, jam_selesai, status_jadwal) VALUES(?,?,?,?,?,?,?,?)";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, jadwal.getIdJadwal());
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newId);
             pstmt.setString(2, jadwal.getIdTutor());
             pstmt.setString(3, jadwal.getMataPelajaran());
             pstmt.setString(4, jadwal.getHari());
             pstmt.setString(5, jadwal.getTanggal());
             pstmt.setString(6, jadwal.getJamMulai());
             pstmt.setString(7, jadwal.getJamSelesai());
-            pstmt.setString(8, jadwal.getStatusJadwal());
+            pstmt.setString(8, "TERSEDIA");
             pstmt.executeUpdate();
-            
-            System.out.println("SUCCESS: Jadwal ketersediaan berhasil ditambahkan.");
+            System.out.println("buat jadwal berhasil");
+            return true;
         } catch (SQLException e) {
             System.err.println("ERROR: Gagal menambahkan jadwal: " + e.getMessage());
-            e.printStackTrace();
+            return false;
         }
     }
     
-    // Method lihatJadwal untuk mengambil daftar jadwal berdasarkan ID tutor
-    // Operasi ini akan mengambil semua jadwal yang terkait dengan tutor tertentu dari tabel Jadwal.
+    /**
+     * DIPERBARUI: Menambah validasi sebelum mengubah.
+     */
+    public boolean ubahJadwal(Jadwal jadwal) {
+        // // Validasi backend
+        if (!isJadwalValid(jadwal, jadwal.getIdJadwal())) return false;
+
+        String sql = "UPDATE Jadwal SET mata_pelajaran = ?, hari = ?, tanggal = ?, jam_mulai = ?, jam_selesai = ? WHERE id_jadwal = ? AND status_jadwal = 'TERSEDIA'";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, jadwal.getMataPelajaran());
+            pstmt.setString(2, jadwal.getHari());
+            pstmt.setString(3, jadwal.getTanggal());
+            pstmt.setString(4, jadwal.getJamMulai());
+            pstmt.setString(5, jadwal.getJamSelesai());
+            pstmt.setString(6, jadwal.getIdJadwal());
+            int affectedRows = pstmt.executeUpdate();
+            System.out.println("edit berhasil");
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: Database error saat mengubah jadwal: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    private boolean isJadwalValid(Jadwal jadwal, String idToExclude) {
+        if (isJadwalOverlap(jadwal, idToExclude)) {
+            System.err.println("VALIDATION FAILED: Jadwal bertabrakan dengan jadwal yang sudah ada.");
+            return false;
+        }
+        return true;
+    }
+
     public List<Jadwal> lihatJadwal(String idTutor) {
         List<Jadwal> daftarJadwal = new ArrayList<>();
         String sql = "SELECT * FROM Jadwal WHERE id_tutor = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, idTutor);
             ResultSet rs = pstmt.executeQuery();
-
             while (rs.next()) {
                 daftarJadwal.add(new Jadwal(
-                        rs.getString("id_jadwal"),
-                        rs.getString("id_tutor"),
-                        rs.getString("mata_pelajaran"),
-                        rs.getString("hari"),
-                        rs.getString("tanggal"),
-                        rs.getString("jam_mulai"),
-                        rs.getString("jam_selesai"),
-                        rs.getString("status_jadwal")
+                    rs.getString("id_jadwal"), rs.getString("id_tutor"),
+                    rs.getString("mata_pelajaran"), rs.getString("hari"),
+                    rs.getString("tanggal"), rs.getString("jam_mulai"),
+                    rs.getString("jam_selesai"), rs.getString("status_jadwal")
                 ));
             }
         } catch (SQLException e) {
             System.err.println("ERROR: Gagal mengambil data jadwal: " + e.getMessage());
-            e.printStackTrace();
         }
         return daftarJadwal;
     }
 
-    // Method lihatSemuaJadwal untuk mengambil semua jadwal dari database
-    // Operasi ini akan mengambil semua jadwal yang ada di tabel Jadwal tanpa filter.
-    public List<Jadwal> lihatSemuaJadwal() {
-        List<Jadwal> daftarJadwal = new ArrayList<>();
-        String sql = "SELECT * FROM Jadwal"; 
-
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                daftarJadwal.add(new Jadwal(
-                        rs.getString("id_jadwal"),
-                        rs.getString("id_tutor"),
-                        rs.getString("mata_pelajaran"),
-                        rs.getString("hari"),
-                        rs.getString("tanggal"),
-                        rs.getString("jam_mulai"),
-                        rs.getString("jam_selesai"),
-                        rs.getString("status_jadwal")
-                ));
-            }
-        } catch (SQLException e) {
-            System.err.println("ERROR: Gagal mengambil semua data jadwal: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return daftarJadwal;
-    }
-    
-    // Method ubahJadwal untuk memperbarui jadwal yang sudah ada
-    // Operasi ini akan memperbarui data jadwal berdasarkan ID jadwal yang diberikan.
-    public void ubahJadwal(Jadwal jadwal) {
-        String checkSql = "SELECT status_jadwal FROM Jadwal WHERE id_jadwal = ?";
-        String updateSql = "UPDATE Jadwal SET mata_pelajaran = ?, hari = ?, tanggal = ?, jam_mulai = ?, jam_selesai = ? WHERE id_jadwal = ?";
-        
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-
-            checkStmt.setString(1, jadwal.getIdJadwal());
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                String status = rs.getString("status_jadwal");
-                if ("DIPESAN".equals(status)) {
-                    System.err.println("ERROR: Tidak dapat mengubah jadwal yang sudah dipesan.");
-                    return;
-                }
-            } else {
-                System.err.println("ERROR: Jadwal tidak ditemukan.");
-                return;
-            }
-            
-            // Jika jadwal 'TERSEDIA'
-            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-                updateStmt.setString(1, jadwal.getMataPelajaran());
-                updateStmt.setString(2, jadwal.getHari());
-                updateStmt.setString(3, jadwal.getTanggal());
-                updateStmt.setString(4, jadwal.getJamMulai());
-                updateStmt.setString(5, jadwal.getJamSelesai());
-                updateStmt.setString(6, jadwal.getIdJadwal());
-
-                int affectedRows = updateStmt.executeUpdate();
-                if (affectedRows > 0) {
-                    System.out.println("SUCCESS: Jadwal berhasil diperbarui.");
-                } else {
-                    System.err.println("ERROR: Gagal memperbarui jadwal, data tidak ditemukan.");
-                }
-            }
-
-        } catch (SQLException e) {
-            System.err.println("ERROR: Database error saat mengubah jadwal: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    // Method hapusJadwal untuk menghapus jadwal berdasarkan ID jadwal
-    // Operasi ini akan menghapus data jadwal dari tabel Jadwal berdasarkan ID jadwal yang diberikan.
-    public void hapusJadwal(String idJadwal) {
-        String checkSql = "SELECT status_jadwal FROM Jadwal WHERE id_jadwal = ?";
-        String deleteSql = "DELETE FROM Jadwal WHERE id_jadwal = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-
-            checkStmt.setString(1, idJadwal);
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                String status = rs.getString("status_jadwal");
-                if ("DIPESAN".equals(status)) {
-                    System.err.println("ERROR: Tidak dapat menghapus jadwal yang sudah dipesan.");
-                    return;
-                }
-            } else {
-                 System.err.println("ERROR: Jadwal yang akan dihapus tidak ditemukan.");
-                 return;
-            }
-            
-            // Jika jadwal 'TERSEDIA'
-            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
-                deleteStmt.setString(1, idJadwal);
-                int affectedRows = deleteStmt.executeUpdate();
-
-                if (affectedRows > 0) {
-                    System.out.println("SUCCESS: Jadwal berhasil dihapus.");
-                } else {
-                    System.err.println("ERROR: Gagal menghapus jadwal.");
-                }
-            }
-
+    public boolean hapusJadwal(String idJadwal) {
+        String sql = "DELETE FROM Jadwal WHERE id_jadwal = ? AND status_jadwal = 'TERSEDIA'";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, idJadwal);
+            int affectedRows = pstmt.executeUpdate();
+            System.out.println("hapus berhasil");
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.err.println("ERROR: Database error saat menghapus jadwal: " + e.getMessage());
-            e.printStackTrace();
+            return false;
         }
     }
-
 
     /* * Cara menjalankan static void main() di TutorController:
      * 1. Copy ini (sebelum baris </plugins>) ke dalam pom.xml:
