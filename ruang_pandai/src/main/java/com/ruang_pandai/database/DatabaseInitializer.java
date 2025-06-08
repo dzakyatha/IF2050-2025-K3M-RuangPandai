@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -68,24 +67,18 @@ public class DatabaseInitializer {
     
     private static void insertDummyData() {
         if (isDevelopmentMode()) {
-            // Path koneksi tetap sama
             try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
                  Statement stmt = conn.createStatement()) {
-                
-                // Cek apakah data sudah ada untuk menghindari duplikasi error
-                // ResultSet rs = stmt.executeQuery("SELECT count(*) FROM Pengguna");
-                // if (rs.next() && rs.getInt(1) > 0) {
-                //     System.out.println("Dummy data already exists.");
-                //     return;
-                // }
 
-                System.out.println("Deleting existing dummy data...");
-                stmt.executeUpdate("DELETE FROM Pembayaran;");
-                stmt.executeUpdate("DELETE FROM Sesi;");
-                stmt.executeUpdate("DELETE FROM Jadwal;");
-                stmt.executeUpdate("DELETE FROM Tutor;");
-                stmt.executeUpdate("DELETE FROM Siswa;");
-                stmt.executeUpdate("DELETE FROM Pengguna;");
+                System.out.println("Dropping existing tables to ensure fresh schema...");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Pembayaran;");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Sesi;");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Jadwal;");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Tutor;");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Siswa;");
+                stmt.executeUpdate("DROP TABLE IF EXISTS Pengguna;");
+
+                executeSchemaScript();
                 
                 // Data Pengguna
                 stmt.executeUpdate("INSERT INTO Pengguna (id_pengguna, nama, role, email, no_telp, alamat) VALUES " +
@@ -104,15 +97,16 @@ public class DatabaseInitializer {
                     "('P4', 'Bahasa Inggris', 'S2 Sastra Inggris', '3 tahun mengajar', 'Penjelasan jelas', 4)");
                 
                 // Data Jadwal
-                stmt.executeUpdate("INSERT INTO Jadwal (id_jadwal, id_tutor, mata_pelajaran, hari, tanggal, jam_mulai, jam_selesai) VALUES " +
-                    "('J1', 'P3', 'Matematika', 'SELASA', '2025-06-10', '09:00', '11:00'), " +
-                    "('J2', 'P3', 'Matematika', 'KAMIS', '2025-06-12', '13:00', '15:00'), " +
-                    "('J3', 'P3', 'Bahasa Inggris', 'RABU', '2025-06-11', '10:00', '12:00')");
+                stmt.executeUpdate("INSERT INTO Jadwal (id_jadwal, id_tutor, mata_pelajaran, hari, tanggal, jam_mulai, jam_selesai, status_jadwal) VALUES " +
+                    "('J1', 'P3', 'Matematika', 'SELASA', '2025-06-10', '08:00', '10:00', 'DIPESAN'), " +
+                    "('J2', 'P3', 'Matematika', 'KAMIS', '2025-06-12', '13:00', '15:00', 'TERSEDIA'), " +
+                    "('J3', 'P4', 'Bahasa Inggris', 'RABU', '2025-06-11', '10:00', '12:00', 'DIPESAN')");
                 
                 // Data Sesi
                 stmt.executeUpdate("INSERT INTO Sesi (id_sesi, id_siswa, id_tutor, id_jadwal, tanggal_pesan, status_pembayaran, status_kehadiran, status_sesi) VALUES " +
-                    "('S1', 'P1', 'P3', 'J1', '2025-06-09', 'SUDAH BAYAR', 'HADIR', 'SELESAI'), " +
-                    "('S2', 'P2', 'P4', 'J3', '2025-06-09', 'MENUNGGU PEMBAYARAN', 'TIDAK HADIR', 'AKAN DATANG')");
+                    "('S1', 'P1', 'P3', 'J1', '2025-06-09', 'SUDAH BAYAR', 'BELUM DIKONFIRMASI', 'AKAN DATANG'), " +
+                    "('S2', 'P2', 'P3', 'J3', '2025-06-10', 'DIBATALKAN', 'BELUM DIKONFIRMASI', 'DIBATALKAN'), " +
+                    "('S3', 'P1', 'P4', 'J3', '2025-06-11', 'SUDAH BAYAR', 'HADIR', 'SELESAI')");
                 
                 // Data Pembayaran
                 stmt.executeUpdate("INSERT INTO Pembayaran (id_pembayaran, id_sesi, jumlah, metode_pembayaran, bukti_pembayaran, waktu_pembayaran, status_pembayaran) VALUES " +
@@ -121,6 +115,7 @@ public class DatabaseInitializer {
                 System.out.println("New dummy data inserted");
             } catch (SQLException e) {
                 if (!e.getMessage().contains("UNIQUE constraint failed")) {
+                    System.out.println("UNIQUE constraint failed. cannot insert new dummy data");
                     e.printStackTrace();
                 }
             }

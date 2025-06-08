@@ -5,6 +5,9 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+import com.ruang_pandai.database.DatabaseInitializer;
 import com.ruang_pandai.boundary.SiswaBoundary;
 import com.ruang_pandai.controller.SiswaController;
 import com.ruang_pandai.database.DatabaseInitializer;
