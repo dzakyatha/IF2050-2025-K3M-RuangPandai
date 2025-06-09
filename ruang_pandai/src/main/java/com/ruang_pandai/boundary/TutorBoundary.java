@@ -84,16 +84,16 @@ public class TutorBoundary {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // Button btnKembali = new Button("Kembali ke Pilih Role");
-        // btnKembali.setPrefWidth(Double.MAX_VALUE);
-        // btnKembali.setStyle("-fx-background-color: #f4f4f4; -fx-text-fill: #333; -fx-font-size: 14px; -fx-alignment: CENTER; -fx-padding: 8 10; -fx-border-color: #ddd; -fx-border-radius: 5;");
-        // btnKembali.setOnAction(e -> {
-        //     MainBoundary mainBoundary = new MainBoundary(primaryStage);
-        //     primaryStage.setScene(mainBoundary.createScene());
-        //     primaryStage.setTitle("Ruang Pandai");
-        // });
+        Button btnKembali = new Button("Kembali ke menu utama");
+        btnKembali.setPrefWidth(Double.MAX_VALUE);
+        btnKembali.setStyle("-fx-background-color: #f4f4f4; -fx-text-fill: #333; -fx-font-size: 14px; -fx-alignment: CENTER; -fx-padding: 8 10; -fx-border-color: #ddd; -fx-border-radius: 5;");
+        btnKembali.setOnAction(e -> {
+            MainBoundary mainBoundary = new MainBoundary(primaryStage);
+            primaryStage.setScene(mainBoundary.createScene());
+            primaryStage.setTitle("Ruang Pandai");
+        });
 
-        sideMenu.getChildren().addAll(appTitle, separator, btnKelolaJadwal, spacer);
+        sideMenu.getChildren().addAll(appTitle, separator, btnKelolaJadwal, spacer, btnKembali);
         return sideMenu;
     }
 

@@ -6,8 +6,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-import com.ruang_pandai.boundary.TutorBoundary;
-import com.ruang_pandai.controller.TutorController;
+import com.ruang_pandai.database.DatabaseInitializer;
+import com.ruang_pandai.boundary.MainBoundary;
+import com.ruang_pandai.boundary.SiswaBoundary;
+import com.ruang_pandai.controller.SiswaController;
 import com.ruang_pandai.database.DatabaseInitializer;
 
 public class App extends Application {
@@ -19,10 +21,14 @@ public class App extends Application {
         primaryStage = stage; 
         primaryStage.setTitle("Ruang Pandai");
 
-        TutorController tutorController = new TutorController();
-        TutorBoundary tutorBoundary = new TutorBoundary(primaryStage, tutorController);
+        // SiswaController siswaController = new SiswaController();
+        // SiswaBoundary siswaBoundary = new SiswaBoundary(primaryStage, siswaController);
 
-        primaryStage.setScene(tutorBoundary.createScene());
+        // Buat instance dari MainBoundary sebagai halaman utama
+        MainBoundary mainBoundary = new MainBoundary(primaryStage);
+
+        // Tampilkan Scene dari MainBoundary
+        primaryStage.setScene(mainBoundary.createScene());
         primaryStage.show();
     }
 
