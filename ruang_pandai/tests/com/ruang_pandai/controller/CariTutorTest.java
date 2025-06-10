@@ -71,7 +71,7 @@ class CariTutorTest {
     @Test
     @DisplayName("Skenario 5: Cari Tutor Berdasarkan Tanggal Tersedia")
     void testCariTutor_berdasarkanTanggal() {
-        LocalDate tanggal = LocalDate.of(2025, 6, 10);
+        LocalDate tanggal = LocalDate.of(2025, 6, 12);
         List<Tutor> hasil = siswaController.cariTutor(null, 0, null, tanggal, null);
         assertNotNull(hasil);
         assertEquals(1, hasil.size(), "Harusnya ada 1 tutor tersedia pada tanggal tersebut");

@@ -100,13 +100,18 @@ public class DatabaseInitializer {
                 stmt.executeUpdate("INSERT INTO Jadwal (id_jadwal, id_tutor, mata_pelajaran, hari, tanggal, jam_mulai, jam_selesai, status_jadwal) VALUES " +
                     "('J1', 'P3', 'Matematika', 'SELASA', '2025-06-10', '08:00', '10:00', 'DIPESAN'), " +
                     "('J2', 'P3', 'Matematika', 'KAMIS', '2025-06-12', '13:00', '15:00', 'TERSEDIA'), " +
-                    "('J3', 'P4', 'Bahasa Inggris', 'RABU', '2025-06-11', '10:00', '12:00', 'DIPESAN')");
+                    "('J3', 'P4', 'Bahasa Inggris', 'RABU', '2025-06-11', '10:00', '12:00', 'DIPESAN'), " +
+                    "('J4', 'P4', 'Bahasa Inggris', 'SELASA', '2025-06-17', '14:00', '16:00', 'DIPESAN'), " +
+                    "('J5', 'P4', 'Bahasa Inggris', 'JUMAT', '2025-06-20', '09:00', '11:00', 'DIPESAN'), " +
+                    "('J6', 'P4', 'Bahasa Inggris', 'SABTU', '2025-06-21', '11:00', '13:00', 'TERSEDIA')");
                 
                 // Data Sesi
                 stmt.executeUpdate("INSERT INTO Sesi (id_sesi, id_siswa, id_tutor, id_jadwal, tanggal_pesan, status_pembayaran, status_kehadiran, status_sesi) VALUES " +
                     "('S1', 'P1', 'P3', 'J1', '2025-06-09', 'SUDAH BAYAR', 'BELUM DIKONFIRMASI', 'AKAN DATANG'), " +
                     "('S2', 'P2', 'P3', 'J3', '2025-06-10', 'DIBATALKAN', 'BELUM DIKONFIRMASI', 'DIBATALKAN'), " +
-                    "('S3', 'P1', 'P4', 'J3', '2025-06-11', 'SUDAH BAYAR', 'HADIR', 'SELESAI')");
+                    "('S3', 'P1', 'P4', 'J3', '2025-06-11', 'SUDAH BAYAR', 'HADIR', 'SELESAI')," + 
+                    "('S4', 'P2', 'P4', 'J4', '2025-06-15', 'SUDAH BAYAR', 'BELUM DIKONFIRMASI', 'AKAN DATANG'), " +
+                    "('S5', 'P2', 'P4', 'J5', '2025-06-18', 'SUDAH BAYAR', 'BELUM DIKONFIRMASI', 'AKAN DATANG')");
                 
                 // Data Pembayaran
                 stmt.executeUpdate("INSERT INTO Pembayaran (id_pembayaran, id_sesi, jumlah, metode_pembayaran, bukti_pembayaran, waktu_pembayaran, status_pembayaran) VALUES " +

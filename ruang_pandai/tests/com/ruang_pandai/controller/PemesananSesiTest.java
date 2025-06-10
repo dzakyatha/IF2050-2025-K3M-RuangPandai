@@ -77,8 +77,8 @@ class PemesananSesiTest {
     @Test
     @DisplayName("Batalkan Sesi Sukses: Sesi 'AKAN DATANG' dan waktu mencukupi")
     void testBatalkanSesi_Success() throws SQLException {
-        String idSesi = "S1";
-        String idJadwalTerkait = "J1";
+        String idSesi = "S4";
+        String idJadwalTerkait = "J4";
 
         boolean result = siswaController.batalkanSesi(idSesi);
 
@@ -101,9 +101,9 @@ class PemesananSesiTest {
     @Test
     @DisplayName("Jadwal Ulang Sesi Sukses: Jadwal baru tersedia")
     void testJadwalUlangSesi_Success() throws SQLException {
-        String idSesi = "S1";
-        String idJadwalLama = "J1";
-        String idJadwalBaru = "J2";
+        String idSesi = "S5";
+        String idJadwalLama = "J5";
+        String idJadwalBaru = "J6";
 
         boolean result = siswaController.jadwalUlangSesi(idSesi, idJadwalBaru);
 

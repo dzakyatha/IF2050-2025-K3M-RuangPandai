@@ -44,8 +44,8 @@ class KelolaJadwalTest {
     @DisplayName("Sukses: Membuat jadwal baru yang valid")
     void testBuatJadwal_Success() {
         Jadwal newJadwal = new Jadwal( 
-            "J4", existingTutorId, "Matematika", "SABTU", 
-            "2025-06-14", "10:00", "12:00", "TERSEDIA"
+            "J7", existingTutorId, "Matematika", "SENIN", 
+            "2025-06-23", "10:00", "12:00", "TERSEDIA"
         );
 
         boolean result = tutorController.buatJadwal(newJadwal); 
@@ -60,8 +60,8 @@ class KelolaJadwalTest {
     @DisplayName("Gagal: Membuat jadwal yang tumpang tindih dengan yang sudah ada")
     void testBuatJadwal_Failure_Overlap() {
         Jadwal overlappingJadwal = new Jadwal( 
-            "J5", existingTutorId, "Matematika", "SELASA", 
-            "2025-06-08", "09:00", "11:00", "TERSEDIA"
+            "J7", existingTutorId, "Matematika", "KAMIS", 
+            "2025-06-12", "13:00", "15:00", "TERSEDIA"
         );
 
         boolean result = tutorController.buatJadwal(overlappingJadwal); 
@@ -100,7 +100,7 @@ class KelolaJadwalTest {
     void testUbahJadwal_Failure_AlreadyBooked() {
         Jadwal jadwalToUpdate = new Jadwal( 
             "J1", existingTutorId, "Matematika", "SELASA", 
-            "2025-06-08", "08:00", "10:00", "DIPESAN"
+            "2025-06-10", "08:00", "10:00", "DIPESAN"
         );
         
         boolean result = tutorController.ubahJadwal(jadwalToUpdate);
@@ -113,7 +113,7 @@ class KelolaJadwalTest {
     void testUbahJadwal_Failure_Overlap() {
         Jadwal jadwalToUpdate = new Jadwal( 
             "J2", existingTutorId, "Matematika", "SELASA",
-            "2025-06-08", "09:00", "11:00", "TERSEDIA" 
+            "2025-06-10", "09:00", "11:00", "TERSEDIA" 
         );
 
         boolean result = tutorController.ubahJadwal(jadwalToUpdate); 
